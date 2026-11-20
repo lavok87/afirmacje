@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Афірмації">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fbf3ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241b20" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Афірмації</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one-screen phone app, content column up to 520px, bottom tab bar; each theme tints the whole screen */
+:root {
+  --bg: #fbf3ef;
+  --surface: rgba(255,255,255,.72);
+  --surface-solid: #fffaf7;
+  --ink: #57373d;
+  --ink-soft: #8d6c71;
+  --line: rgba(87,55,61,.12);
+  --rose: #c96f80;
+  --rose-ink: #ffffff;
+  --shadow: rgba(150,80,90,.16);
+  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --font-body: "Manrope", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 26px;
+  --confidence-1: #FDE8D2; --confidence-2: #F5BFA8; --confidence-a: #B8664A;
+  --productivity-1: #FBF1DC; --productivity-2: #EDCBA4; --productivity-a: #946B40;
+  --mindfulness-1: #E8F2E6; --mindfulness-2: #BFD9C5; --mindfulness-a: #55866A;
+  --selfLove-1: #FCE1E4; --selfLove-2: #F2AFBC; --selfLove-a: #B85A70;
+  --motivation-1: #FDE4D6; --motivation-2: #F2A994; --motivation-a: #B5563D;
+  --dreams-1: #EDE6F7; --dreams-2: #C9BAE8; --dreams-a: #7660AE;
+  --gratitude-1: #FFF3DB; --gratitude-2: #F3D09F; --gratitude-a: #9C7430;
+  --t1: var(--selfLove-1); --t2: var(--selfLove-2); --ta: var(--selfLove-a);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #241b20; --surface: rgba(255,255,255,.07); --surface-solid: #2f242a;
+    --ink: #f5e4e2; --ink-soft: #c4a7aa; --line: rgba(245,228,226,.12);
+    --rose: #e597a4; --rose-ink: #2a1d22; --shadow: rgba(0,0,0,.35);
+    color-scheme: dark;
+    --confidence-1: #423839; --confidence-2: #5f4946; --confidence-a: #d19c89;
+    --productivity-1: #42393a; --productivity-2: #5c4c45; --productivity-a: #b99f83;
+    --mindfulness-1: #3f393c; --mindfulness-2: #4f504e; --mindfulness-a: #90b09e;
+    --selfLove-1: #42373b; --selfLove-2: #5e444c; --selfLove-a: #d194a2;
+    --motivation-1: #423739; --motivation-2: #5e4340; --motivation-a: #cf9181;
+    --dreams-1: #40373e; --dreams-2: #524858; --dreams-a: #a698ca;
+    --gratitude-1: #43393a; --gratitude-2: #5e4e44; --gratitude-a: #bfa578;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #241b20; --surface: rgba(255,255,255,.07); --surface-solid: #2f242a;
+  --ink: #f5e4e2; --ink-soft: #c4a7aa; --line: rgba(245,228,226,.12);
+  --rose: #e597a4; --rose-ink: #2a1d22; --shadow: rgba(0,0,0,.35);
+  color-scheme: dark;
+    --confidence-1: #423839; --confidence-2: #5f4946; --confidence-a: #d19c89;
+    --productivity-1: #42393a; --productivity-2: #5c4c45; --productivity-a: #b99f83;
+    --mindfulness-1: #3f393c; --mindfulness-2: #4f504e; --mindfulness-a: #90b09e;
+    --selfLove-1: #42373b; --selfLove-2: #5e444c; --selfLove-a: #d194a2;
+    --motivation-1: #423739; --motivation-2: #5e4340; --motivation-a: #cf9181;
+    --dreams-1: #40373e; --dreams-2: #524858; --dreams-a: #a698ca;
+    --gratitude-1: #43393a; --gratitude-2: #5e4e44; --gratitude-a: #bfa578;
+}
+
+.th-confidence { --t1: var(--confidence-1); --t2: var(--confidence-2); --ta: var(--confidence-a); }
+.th-productivity { --t1: var(--productivity-1); --t2: var(--productivity-2); --ta: var(--productivity-a); }
+.th-mindfulness { --t1: var(--mindfulness-1); --t2: var(--mindfulness-2); --ta: var(--mindfulness-a); }
+.th-selfLove { --t1: var(--selfLove-1); --t2: var(--selfLove-2); --ta: var(--selfLove-a); }
+.th-motivation { --t1: var(--motivation-1); --t2: var(--motivation-2); --ta: var(--motivation-a); }
+.th-dreams { --t1: var(--dreams-1); --t2: var(--dreams-2); --ta: var(--dreams-a); }
+.th-gratitude { --t1: var(--gratitude-1); --t2: var(--gratitude-2); --ta: var(--gratitude-a); }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 12px; }
+
+.app {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, var(--t1) 0%, var(--t2) 100%);
+  transition: background .6s ease;
+}
+.screen {
+  flex: 1;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px calc(96px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+}
+.view { display: flex; flex-direction: column; gap: 18px; flex: 1; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.1rem;
+  line-height: 1.1;
+  margin: 8px 0 0;
+  text-wrap: balance;
+}
+.lead { color: var(--ink-soft); margin: 0; line-height: 1.5; font-size: .95rem; }
+.eyebrow {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Today */
+.today-head { display: flex; flex-direction: column; gap: 4px; text-align: center; padding-top: 8px; }
+.greet { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; }
+.date { color: var(--ink-soft); font-size: .9rem; }
+.today-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; align-items: center; }
+.card {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--surface);
+  border-radius: 32px;
+  padding: 40px 28px 30px;
+  box-shadow: 0 18px 40px -18px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.card.enter { animation: rise .55s cubic-bezier(.2,.8,.2,1); }
+@keyframes rise { from { opacity: .2; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+.theme-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ta);
+}
+.theme-tag svg { width: 16px; height: 16px; }
+.quote {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 7.4vw, 2.5rem);
+  line-height: 1.18;
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.mark { color: var(--ta); font-size: .78rem; display: flex; align-items: center; gap: 6px; opacity: .8; }
+.mark svg { width: 14px; height: 14px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.pill {
+  border: 0;
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: .9rem;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 6px 18px -10px var(--shadow);
+  transition: transform .15s ease, background .2s;
+}
+.pill:active { transform: scale(.97); }
+.pill svg { width: 17px; height: 17px; }
+.pill.primary { background: var(--rose); color: var(--rose-ink); }
+.linkbtn { border: 0; background: none; color: var(--ink); font-weight: 600; font-size: .85rem; text-decoration: underline; text-underline-offset: 3px; padding: 6px; }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  background: var(--ink); color: var(--bg);
+  padding: 10px 18px; border-radius: 999px; font-size: .85rem; font-weight: 600;
+  z-index: 30;
+}
+
+/* Themes */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tile {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(150deg, var(--t1), var(--t2));
+  min-height: 132px;
+  box-shadow: 0 10px 26px -18px var(--shadow);
+  transition: opacity .25s;
+  display: flex;
+}
+.tile.off { opacity: .5; }
+.tile-open {
+  flex: 1; border: 0; background: none; text-align: left;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+  padding: 16px; border-radius: 24px; min-width: 0;
+}
+.tile-open svg { width: 24px; height: 24px; color: var(--ta); }
+.tile-name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
+.tile-count { font-size: .78rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.check {
+  position: absolute; top: 10px; right: 10px;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--ta); background: transparent;
+  display: grid; place-items: center; padding: 0; color: var(--surface-solid);
+}
+.check[aria-pressed="true"] { background: var(--ta); }
+.check svg { width: 16px; height: 16px; opacity: 0; }
+.check[aria-pressed="true"] svg { opacity: 1; }
+.row {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  background: var(--surface); border-radius: 20px; padding: 14px 16px;
+}
+.row label { font-weight: 600; min-width: 0; }
+.switch { position: relative; width: 50px; height: 30px; flex: none; }
+.switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.switch span { position: absolute; inset: 0; border-radius: 999px; background: var(--line); transition: background .2s; pointer-events: none; }
+.switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: transform .2s; }
+.switch input:checked + span { background: var(--rose); }
+.switch input:checked + span::after { transform: translateX(20px); }
+.switch input:focus-visible + span { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+.back { align-self: flex-start; border: 0; background: var(--surface); border-radius: 999px; padding: 8px 14px 8px 10px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.back svg { width: 18px; height: 18px; }
+.list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.list li {
+  background: var(--surface); border-radius: 18px; padding: 14px 16px;
+  display: flex; gap: 12px; align-items: baseline;
+}
+.list li svg { width: 12px; height: 12px; color: var(--ta); flex: none; transform: translateY(1px); }
+.list .txt { font-family: var(--font-display); font-size: 1.22rem; line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+
+/* Mine */
+.empty { text-align: center; padding: 36px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--surface); border-radius: var(--radius); }
+.empty svg { width: 44px; height: 44px; color: var(--rose); }
+.empty p { margin: 0; }
+.empty .big { font-family: var(--font-display); font-size: 1.45rem; font-weight: 600; }
+.mine-item { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border-radius: 20px; padding: 16px; }
+.mine-item .txt { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.3; overflow-wrap: anywhere; }
+.mine-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mine-meta .theme-tag { font-size: .66rem; }
+.mini { border: 0; background: none; color: var(--ink-soft); font-weight: 600; font-size: .82rem; padding: 4px 6px; }
+.mini.danger { color: #b44a5c; }
+.form { display: flex; flex-direction: column; gap: 12px; background: var(--surface); border-radius: var(--radius); padding: 18px; }
+.form label { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.form textarea {
+  border: 1px solid var(--line); background: var(--surface-solid); border-radius: 16px;
+  padding: 12px 14px; min-height: 96px; resize: vertical;
+  font-family: var(--font-display); font-size: 1.3rem; line-height: 1.3;
+}
+.form .hint { font-size: .82rem; color: var(--ink-soft); margin: 0; line-height: 1.45; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1.5px solid transparent; background: linear-gradient(150deg, var(--t1), var(--t2));
+  border-radius: 999px; padding: 8px 12px; font-size: .82rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.chip svg { width: 14px; height: 14px; color: var(--ta); }
+.chip[aria-pressed="true"] { border-color: var(--ta); }
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.confirm { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .85rem; }
+
+/* Settings */
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 999px; padding: 4px; gap: 4px; }
+.seg button { border: 0; background: none; border-radius: 999px; padding: 11px; font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--rose); color: var(--rose-ink); }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; counter-reset: s; }
+.steps li { background: var(--surface); border-radius: 18px; padding: 14px 16px 14px 52px; position: relative; line-height: 1.45; counter-increment: s; }
+.steps li::before {
+  content: counter(s); position: absolute; left: 14px; top: 13px;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--rose); color: var(--rose-ink);
+  display: grid; place-items: center; font-size: .8rem; font-weight: 700;
+}
+.stat { display: flex; justify-content: space-between; background: var(--surface); border-radius: 18px; padding: 14px 16px; font-variant-numeric: tabular-nums; }
+.stat b { font-weight: 700; }
+.code-box { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border-radius: var(--radius); padding: 16px; }
+.code-box p { margin: 0; line-height: 1.45; font-size: .9rem; }
+.code-box textarea { border: 1px solid var(--line); background: var(--surface-solid); border-radius: 12px; padding: 10px; font-family: ui-monospace, Menlo, monospace; font-size: .72rem; min-height: 70px; }
+
+/* Tab bar */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--surface-solid);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+.tabbar nav { max-width: 520px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab {
+  border: 0; background: none; padding: 9px 4px 10px; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-size: .68rem; font-weight: 600; color: var(--ink-soft);
+}
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--rose); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+</head>
+<body>
+<div class="app" id="app">
+  <main class="screen" id="screen"></main>
+  <div class="tabbar"><nav id="tabs" aria-label="Розділи"></nav></div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ---------- Дані ---------- */
+const LIB = {"confidence": [["Я впевнена в собі та своїх силах.", "Jestem pewna siebie i swoich możliwości."], ["Я заслуговую на повагу і поважаю себе сама.", "Zasługuję na szacunek i sama siebie szanuję."], ["Мій голос важливий, і я не боюся його використовувати.", "Mój głos jest ważny i nie boję się go używać."], ["Я довіряю своїй інтуїції.", "Ufam swojej intuicji."], ["Я сильна, навіть коли мені важко.", "Jestem silna, nawet gdy jest mi trudno."], ["Я гідна всього найкращого.", "Jestem warta wszystkiego, co najlepsze."], ["Я ухвалюю рішення спокійно й упевнено.", "Podejmuję decyzje spokojnie i pewnie."], ["Мені не потрібне чиєсь схвалення, щоб бути собою.", "Nie potrzebuję niczyjej aprobaty, żeby być sobą."], ["Я вмію відстоювати свої межі.", "Potrafię bronić swoich granic."], ["Я пишаюся тим, якою я стала.", "Jestem dumna z tego, kim się stałam."], ["Кожен виклик робить мене сміливішою.", "Każde wyzwanie czyni mnie odważniejszą."], ["Я сяю такою, яка я є.", "Błyszczę taka, jaka jestem."], ["Я здатна на більше, ніж думаю.", "Stać mnie na więcej, niż myślę."], ["Я приймаю компліменти з вдячністю.", "Przyjmuję komplementy z wdzięcznością."], ["Я сама для себе найкраща подруга й опора.", "Jestem dla siebie najlepszą przyjaciółką i oparciem."]], "productivity": [["Я зосереджена на тому, що справді важливо.", "Jestem skupiona na tym, co naprawdę ważne."], ["Я роблю крок за кроком, і цього достатньо.", "Idę krok po kroku i to wystarczy."], ["Сьогодні я зроблю головне без поспіху.", "Dziś zrobię to, co najważniejsze, bez pośpiechu."], ["Я організована, і мій день під моїм контролем.", "Jestem zorganizowana, a mój dzień jest pod moją kontrolą."], ["Я вмію відпочивати, щоб працювати з радістю.", "Umiem odpoczywać, żeby pracować z radością."], ["Я легко починаю справи й доводжу їх до кінця.", "Łatwo zaczynam sprawy i doprowadzam je do końca."], ["Мій час цінний, і я використовую його мудро.", "Mój czas jest cenny i wykorzystuję go mądrze."], ["Я кажу «ні» всьому, що відволікає мене від цілей.", "Mówię „nie” wszystkiemu, co odciąga mnie od celów."], ["Кожна маленька справа наближає мене до великої мети.", "Każde małe zadanie przybliża mnie do wielkiego celu."], ["Я працюю з натхненням і легкістю.", "Pracuję z inspiracją i lekkością."], ["Я спокійна й зібрана навіть у насичений день.", "Jestem spokojna i skupiona nawet w intensywny dzień."], ["Я пишаюся кожним завершеним завданням.", "Jestem dumna z każdego ukończonego zadania."], ["Мені вистачає часу на все, що для мене важливо.", "Mam czas na wszystko, co jest dla mnie ważne."], ["Я обираю прогрес, а не ідеальність.", "Wybieram postęp, a nie perfekcję."], ["Я спрямовую свою енергію туди, куди хочу.", "Kieruję swoją energię tam, gdzie chcę."]], "mindfulness": [["Я тут і зараз, і ця мить належить мені.", "Jestem tu i teraz, a ta chwila należy do mnie."], ["Я дихаю глибоко й відпускаю напругу.", "Oddycham głęboko i uwalniam napięcie."], ["Я помічаю красу в простих речах.", "Dostrzegam piękno w prostych rzeczach."], ["Мої думки — лише думки, і я обираю, яким із них вірити.", "Moje myśli to tylko myśli i sama wybieram, w które wierzyć."], ["Я спокійна, як тиха вода.", "Jestem spokojna jak cicha woda."], ["Я прислухаюся до свого тіла й дбаю про нього.", "Słucham swojego ciała i dbam o nie."], ["Я приймаю свої почуття без осуду.", "Przyjmuję swoje uczucia bez oceniania."], ["Я проживаю цей день повільно й усвідомлено.", "Przeżywam ten dzień powoli i świadomie."], ["Мені не потрібно поспішати, я все встигну.", "Nie muszę się spieszyć, ze wszystkim zdążę."], ["Я відпускаю те, чого не можу змінити.", "Odpuszczam to, czego nie mogę zmienić."], ["Кожен вдих наповнює мене спокоєм.", "Każdy oddech napełnia mnie spokojem."], ["Я присутня у своєму житті.", "Jestem obecna w swoim życiu."], ["Тиша всередині мене — моя сила.", "Cisza we mnie jest moją siłą."], ["Я обираю спокій замість тривоги.", "Wybieram spokój zamiast niepokoju."], ["Я м'яко повертаю себе в теперішню мить.", "Łagodnie wracam do chwili obecnej."]], "selfLove": [["Я люблю себе такою, яка я є.", "Kocham siebie taką, jaka jestem."], ["Я достатня. Завжди.", "Jestem wystarczająca. Zawsze."], ["Я ставлюся до себе з ніжністю й турботою.", "Traktuję siebie z czułością i troską."], ["Моє тіло прекрасне і заслуговує на любов.", "Moje ciało jest piękne i zasługuje na miłość."], ["Я дозволяю собі відпочивати без почуття провини.", "Pozwalam sobie odpoczywać bez poczucia winy."], ["Я пробачаю собі помилки й вчуся на них.", "Wybaczam sobie błędy i uczę się na nich."], ["Я гарна і зсередини, і зовні.", "Jestem piękna w środku i na zewnątrz."], ["Я заслуговую на ту любов, яку дарую іншим.", "Zasługuję na miłość, którą daję innym."], ["Мої потреби важливі.", "Moje potrzeby są ważne."], ["Я обираю бути до себе доброю.", "Postanawiam być dla siebie dobra."], ["Я — найважливіша людина у своєму житті.", "Jestem najważniejszą osobą w swoim życiu."], ["Я дбаю про себе, бо я на це заслуговую.", "Dbam o siebie, bo jestem tego warta."], ["Я приймаю всі свої сторони.", "Akceptuję wszystkie swoje strony."], ["Я усміхаюся своєму відображенню.", "Uśmiecham się do swojego odbicia."], ["Мені добре й затишно із самою собою.", "Dobrze mi i przytulnie z samą sobą."]], "motivation": [["Сьогодні я роблю ще один крок уперед.", "Dziś robię kolejny krok naprzód."], ["Я сильніша за будь-які сумніви.", "Jestem silniejsza niż wszelkie wątpliwości."], ["У мене є все, щоб почати просто зараз.", "Mam wszystko, żeby zacząć już teraz."], ["Я не здаюся: я відпочиваю й іду далі.", "Nie poddaję się: odpoczywam i idę dalej."], ["Кожен день — це новий шанс.", "Każdy dzień to nowa szansa."], ["Я рішуча, наполеглива й смілива.", "Jestem zdecydowana, wytrwała i odważna."], ["Мої зусилля обов'язково дадуть результат.", "Moje starania na pewno przyniosą efekty."], ["Я перетворюю страх на енергію для дії.", "Zamieniam strach w energię do działania."], ["Я вже пройшла довгий шлях і пишаюся собою.", "Przeszłam już długą drogę i jestem z siebie dumna."], ["Труднощі роблять мене мудрішою.", "Trudności czynią mnie mądrzejszą."], ["Я сама створюю свої можливості.", "Sama tworzę swoje możliwości."], ["Мені під силу все, що я задумала.", "Jestem w stanie zrobić wszystko, co zaplanowałam."], ["Я надихаю себе та інших.", "Inspiruję siebie i innych."], ["Я обираю діяти, а не чекати.", "Wybieram działanie zamiast czekania."], ["Моя сила — у моїй наполегливості.", "Moja siła tkwi w mojej wytrwałości."]], "dreams": [["Мої мрії здійсненні, і я вже на шляху до них.", "Moje marzenia są w zasięgu ręki i już do nich zmierzam."], ["Я ясно бачу свої цілі.", "Wyraźnie widzę swoje cele."], ["Я дозволяю собі мріяти з розмахом.", "Pozwalam sobie marzyć z rozmachem."], ["Всесвіт підтримує мої мрії.", "Wszechświat wspiera moje marzenia."], ["Я гідна життя, про яке мрію.", "Jestem warta życia, o którym marzę."], ["Щодня я наближаюся до своєї мети.", "Każdego dnia zbliżam się do swojego celu."], ["Я вірю у своє майбутнє.", "Wierzę w swoją przyszłość."], ["Я відкрита для нових можливостей.", "Jestem otwarta na nowe możliwości."], ["Мої цілі надихають мене щоранку.", "Moje cele inspirują mnie każdego ranka."], ["Я створюю життя своєї мрії власними руками.", "Tworzę życie swoich marzeń własnymi rękami."], ["Те, чого я прагну, вже йде до мене.", "To, czego pragnę, już do mnie zmierza."], ["Я святкую кожен маленький успіх.", "Świętuję każdy mały sukces."], ["Я заслуговую на успіх і досягну його.", "Zasługuję na sukces i osiągnę go."], ["Я сміливо мрію і впевнено дію.", "Odważnie marzę i pewnie działam."], ["Моє майбутнє світле й сповнене радості.", "Moja przyszłość jest jasna i pełna radości."]], "gratitude": [["Я вдячна за цей новий день.", "Jestem wdzięczna za ten nowy dzień."], ["Моє життя сповнене маленьких чудес.", "Moje życie jest pełne małych cudów."], ["Я дякую своєму тілу за все, що воно для мене робить.", "Dziękuję swojemu ciału za wszystko, co dla mnie robi."], ["Я вдячна людям, які мене люблять.", "Jestem wdzięczna ludziom, którzy mnie kochają."], ["Життя прекрасне, і я насолоджуюся ним.", "Życie jest piękne i cieszę się nim."], ["Я помічаю добро навколо себе.", "Dostrzegam dobro wokół siebie."], ["У моєму житті багато любові й тепла.", "W moim życiu nie brakuje miłości i ciepła."], ["Я вдячна навіть за уроки, які було важко пройти.", "Jestem wdzięczna nawet za trudne lekcje."], ["Кожен день дарує мені привід усміхнутися.", "Każdy dzień daje mi powód do uśmiechu."], ["Я відкриваю серце радості.", "Otwieram serce na radość."], ["Я ціную те, що маю, і з радістю приймаю нове.", "Doceniam to, co mam, i z radością przyjmuję nowe."], ["Моє життя — це дарунок, і я проживаю його з любов'ю.", "Moje życie jest darem i przeżywam je z miłością."], ["Я щаслива бути собою.", "Jestem szczęśliwa, że jestem sobą."], ["Світ щедрий до мене, і я щедра до світу.", "Świat jest dla mnie hojny, a ja jestem hojna dla świata."], ["Сьогодні я обираю радість.", "Dziś wybieram radość."]]};
+const THEMES = ["confidence","productivity","mindfulness","selfLove","motivation","dreams","gratitude"];
+const THEME_TITLES = {
+  confidence:   ["Впевненість у собі", "Pewność siebie"],
+  productivity: ["Продуктивність", "Produktywność"],
+  mindfulness:  ["Усвідомленість", "Uważność"],
+  selfLove:     ["Любов до себе", "Miłość do siebie"],
+  motivation:   ["Мотивація", "Motywacja"],
+  dreams:       ["Мрії та цілі", "Marzenia i cele"],
+  gratitude:    ["Вдячність і життя", "Wdzięczność i życie"]
+};
+const ICON = {
+  confidence: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  productivity: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>',
+  mindfulness: '<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l7-7"/>',
+  selfLove: '<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"/>',
+  motivation: '<path d="M12 3c.8 3.6 5 5.4 5 10.2a5 5 0 0 1-10 0c0-2.4 1.3-3.9 2.4-5 .4 1.8 1.3 2.8 2.4 2.9C11 8.400 11.400 5.300 12 3z"/>',
+  dreams: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><path d="M17 4v3M15.5 5.5h3"/>',
+  gratitude: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/>',
+  sun: '<path d="M3 18h18M6 18a6 6 0 0 1 12 0M12 6V4M5.6 9.6 4.2 8.2M18.4 9.6l1.4-1.4"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+  heartText: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 15.5s-3.5-2.1-3.5-4.6a1.9 1.9 0 0 1 3.5-1 1.9 1.9 0 0 1 3.5 1c0 2.5-3.5 4.6-3.5 4.6z"/>',
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z"/>',
+  shuffle: '<path d="M4 7h3c4 0 6 10 10 10h3M4 17h3c1.6 0 2.8-1.6 3.8-3.6M13.2 9.6C14.2 7.6 15.4 7 17 7h3M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/>',
+  share: '<path d="M12 15V3.5M8 7.5l4-4 4 4M6 11H5v9.5h14V11h-1"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  dot: '<circle cx="12" cy="12" r="5" fill="currentColor"/>'
+};
+const svg = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
+
+const T = {
+  tabToday: ["Сьогодні", "Dziś"], tabThemes: ["Теми", "Tematy"], tabMine: ["Мої", "Moje"], tabSettings: ["Мова", "Język"],
+  ofDay: ["Афірмація дня", "Afirmacja dnia"],
+  another: ["Інша", "Inna"], share: ["Поділитися", "Udostępnij"], copied: ["Скопійовано", "Skopiowano"],
+  backToday: ["До афірмації дня", "Wróć do afirmacji dnia"],
+  morning: ["Доброго ранку", "Dzień dobry"], afternoon: ["Гарного дня", "Miłego dnia"], evening: ["Гарного вечора", "Miłego wieczoru"],
+  mine: ["моя", "moja"],
+  themesTitle: ["Теми", "Tematy"],
+  themesLead: ["Щодня показується одна афірмація з обраних тем. Торкнися теми, щоб переглянути всі її афірмації.", "Codziennie pokazuje się jedna afirmacja z wybranych tematów. Stuknij temat, aby zobaczyć wszystkie jego afirmacje."],
+  includeMine: ["Мої афірмації теж показувати", "Pokazuj też moje afirmacje"],
+  showTheme: ["Показувати цю тему", "Pokazuj ten temat"],
+  back: ["Назад", "Wstecz"],
+  mineTitle: ["Мої афірмації", "Moje afirmacje"],
+  mineLead: ["Додай слова, які важливі саме для тебе. Вони з'являтимуться разом із готовими.", "Dodaj słowa, które są ważne właśnie dla Ciebie. Będą pojawiać się razem z gotowymi."],
+  emptyBig: ["Тут будуть твої власні афірмації", "Tu pojawią się Twoje własne afirmacje"],
+  emptySmall: ["Напиши першу просто зараз.", "Napisz pierwszą już teraz."],
+  add: ["Додати афірмацію", "Dodaj afirmację"],
+  newOne: ["Нова афірмація", "Nowa afirmacja"], editOne: ["Редагування", "Edycja"],
+  text: ["Текст", "Tekst"], theme: ["Тема", "Temat"],
+  placeholder: ["Я спокійна і щаслива", "Jestem spokojna i szczęśliwa"],
+  hint: ["Пиши в теперішньому часі, ніби це вже правда.", "Pisz w czasie teraźniejszym, jakby to już była prawda."],
+  save: ["Зберегти", "Zapisz"], cancel: ["Скасувати", "Anuluj"], edit: ["Змінити", "Zmień"], del: ["Видалити", "Usuń"],
+  sure: ["Видалити цю афірмацію?", "Usunąć tę afirmację?"], yes: ["Так, видалити", "Tak, usuń"],
+  settingsTitle: ["Мова й налаштування", "Język i ustawienia"],
+  langLead: ["Мова сторінки та готових афірмацій.", "Język strony i gotowych afirmacji."],
+  homeTitle: ["Як додати на екран «Додому»", "Jak dodać do ekranu początkowego"],
+  home1: ["Відкрий цю сторінку в Safari.", "Otwórz tę stronę w Safari."],
+  home2: ["Торкнися кнопки «Поділитися» внизу екрана.", "Stuknij przycisk „Udostępnij” na dole ekranu."],
+  home3: ["Обери «На екран „Додому“» і натисни «Додати».", "Wybierz „Do ekranu początkowego” i stuknij „Dodaj”."],
+  home4: ["Іконка відкриватиме афірмації як окремий додаток, навіть без інтернету.", "Ikona otworzy afirmacje jak osobną aplikację, nawet bez internetu."],
+  widgetTitle: ["Перенести у віджет", "Przenieś do widżetu"],
+  widgetLead: ["Щоб віджет Scriptable показував твої власні афірмації й обрану мову, скопіюй код і в Scriptable обери «Імпортувати зі сторінки».", "Aby widżet Scriptable pokazywał Twoje własne afirmacje i wybrany język, skopiuj kod i w Scriptable wybierz „Importuj ze strony”."],
+  copyCode: ["Копіювати код", "Kopiuj kod"],
+  stats: ["Готових афірмацій", "Gotowych afirmacji"], statsMine: ["Моїх афірмацій", "Moich afirmacji"]
+};
+
+/* ---------- Сховище ---------- */
+const KEY = "afirmacji.v1";
+const defaults = () => ({
+  lang: (navigator.language || "").toLowerCase().startsWith("pl") ? "pl" : "uk",
+  themes: THEMES.slice(),
+  includeCustom: true,
+  custom: []
+});
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return defaults();
+    const s = Object.assign(defaults(), JSON.parse(raw));
+    s.themes = s.themes.filter(t => THEMES.includes(t));
+    s.custom = Array.isArray(s.custom) ? s.custom.filter(c => c && c.text && THEMES.includes(c.theme)) : [];
+    return s;
+  } catch (e) { return defaults(); }
+}
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+let state = load();
+const ui = { tab: "today", shown: null, detail: null, editing: null, confirmDel: null, now: new Date() };
+const L = () => (state.lang === "pl" ? 1 : 0);
+const t = (k) => T[k][L()];
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+
+/* ---------- Афірмація дня (той самий алгоритм у віджеті Scriptable) ---------- */
+function fnv(str) {
+  let h = 0xcbf29ce484222325n;
+  for (const b of new TextEncoder().encode(str)) {
+    h ^= BigInt(b);
+    h = (h * 0x100000001b3n) & 0xffffffffffffffffn;
+  }
+  return h;
+}
+const hashCache = new Map();
+const hashOf = (id) => { if (!hashCache.has(id)) hashCache.set(id, fnv(id)); return hashCache.get(id); };
+function dayNumber(d) {
+  const a = new Date(2024, 0, 1), b = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return Math.abs(Math.round((b - a) / 86400000));
+}
+function libFor(theme) {
+  return LIB[theme].map((pair, i) => ({ id: `${theme}-${i}`, theme, text: pair[L()], custom: false }));
+}
+function customFor(theme) {
+  return state.custom.filter(c => !theme || c.theme === theme).map(c => ({ id: `custom-${c.id}`, theme: c.theme, text: c.text, custom: true }));
+}
+function pool() {
+  const themes = state.themes.length ? state.themes : THEMES;
+  let list = [];
+  THEMES.forEach(th => { if (themes.includes(th)) list = list.concat(libFor(th)); });
+  if (state.includeCustom) list = list.concat(customFor());
+  if (!list.length) list = libFor("selfLove");
+  return list.sort((x, y) => { const a = hashOf(x.id), b = hashOf(y.id); return a < b ? -1 : a > b ? 1 : 0; });
+}
+const todayAff = () => { const p = pool(); return p[dayNumber(ui.now) % p.length]; };
+
+/* ---------- Відмальовка ---------- */
+const screen = document.getElementById("screen");
+const app = document.getElementById("app");
+const tabs = document.getElementById("tabs");
+
+function setTint(theme) { app.className = "app th-" + theme; }
+
+function greeting() {
+  const h = ui.now.getHours();
+  return h >= 5 && h < 12 ? t("morning") : h < 18 && h >= 12 ? t("afternoon") : t("evening");
+}
+function dateLabel() {
+  try {
+    const s = ui.now.toLocaleDateString(state.lang === "pl" ? "pl-PL" : "uk-UA", { weekday: "long", day: "numeric", month: "long" });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  } catch (e) { return ui.now.toDateString(); }
+}
+
+function renderTabs() {
+  const items = [["today", "sun", "tabToday"], ["themes", "grid", "tabThemes"], ["mine", "heartText", "tabMine"], ["settings", "globe", "tabSettings"]];
+  tabs.innerHTML = items.map(([id, ic, k]) =>
+    `<button class="tab" data-tab="${id}" ${ui.tab === id ? 'aria-current="page"' : ""}>${svg(ic)}<span>${t(k)}</span></button>`).join("");
+  document.documentElement.lang = state.lang;
+}
+
+function renderToday(animate) {
+  const today = todayAff();
+  const a = ui.shown || today;
+  setTint(a.theme);
+  screen.innerHTML = `
+    <section class="view">
+      <header class="today-head">
+        <div class="greet">${greeting()}</div>
+        <div class="date">${esc(dateLabel())}</div>
+      </header>
+      <div class="today-body">
+        <div class="eyebrow">${ui.shown ? "&nbsp;" : t("ofDay")}</div>
+        <article class="card${animate ? " enter" : ""}">
+          <span class="theme-tag">${svg(a.theme)}${THEME_TITLES[a.theme][L()]}</span>
+          <p class="quote">${esc(a.text)}</p>
+          <span class="mark">${svg("selfLove")}${a.custom ? t("mine") : ""}</span>
+        </article>
+        <div class="actions">
+          <button class="pill" data-act="another">${svg("shuffle")}${t("another")}</button>
+          <button class="pill" data-act="share">${svg("share")}${t("share")}</button>
+        </div>
+        <button class="linkbtn" data-act="backToday" ${ui.shown ? "" : "hidden"}>${t("backToday")}</button>
+      </div>
+    </section>`;
+}
+
+function renderThemes() {
+  setTint(ui.detail || "selfLove");
+  if (ui.detail) {
+    const th = ui.detail;
+    const items = libFor(th).concat(customFor(th));
+    const on = state.themes.includes(th);
+    screen.innerHTML = `
+      <section class="view">
+        <button class="back" data-act="closeDetail">${svg("back")}${t("back")}</button>
+        <h1>${THEME_TITLES[th][L()]}</h1>
+        <div class="row"><label for="themeSwitch">${t("showTheme")}</label>
+          <span class="switch"><input type="checkbox" id="themeSwitch" data-act="toggleTheme" data-theme-id="${th}" ${on ? "checked" : ""}><span></span></span></div>
+        <ul class="list">${items.map(i => `<li>${svg(i.custom ? "selfLove" : "dot")}<span class="txt">${esc(i.text)}</span></li>`).join("")}</ul>
+      </section>`;
+    return;
+  }
+  screen.innerHTML = `
+    <section class="view">
+      <h1>${t("themesTitle")}</h1>
+      <p class="lead">${t("themesLead")}</p>
+      <div class="grid">${THEMES.map(th => {
+        const on = state.themes.includes(th);
+        const n = LIB[th].length + state.custom.filter(c => c.theme === th).length;
+        return `<div class="tile th-${th}${on ? "" : " off"}">
+          <button class="tile-open" data-act="openTheme" data-theme-id="${th}">${svg(th)}
+            <span><span class="tile-name">${THEME_TITLES[th][L()]}</span><br><span class="tile-count">${n} ✦</span></span>
+          </button>
+          <button class="check" data-act="toggleTheme" data-theme-id="${th}" aria-pressed="${on}" aria-label="${t("showTheme")}: ${THEME_TITLES[th][L()]}">${svg("check")}</button>
+        </div>`;
+      }).join("")}</div>
+      <div class="row"><label for="incCustom">${t("includeMine")}</label>
+        <span class="switch"><input type="checkbox" id="incCustom" data-act="includeCustom" ${state.includeCustom ? "checked" : ""}><span></span></span></div>
+    </section>`;
+}
+
+function formHTML() {
+  const ed = ui.editing;
+  return `
+    <form class="form" id="mineForm">
+      <div class="eyebrow">${ed.id ? t("editOne") : t("newOne")}</div>
+      <label for="mineText">${t("text")}</label>
+      <textarea id="mineText" maxlength="240" placeholder="${t("placeholder")}">${esc(ed.text)}</textarea>
+      <p class="hint">${t("hint")}</p>
+      <label>${t("theme")}</label>
+      <div class="chips">${THEMES.map(th => `<button type="button" class="chip th-${th}" data-act="pickTheme" data-theme-id="${th}" aria-pressed="${ed.theme === th}">${svg(th)}${THEME_TITLES[th][L()]}</button>`).join("")}</div>
+      <div class="form-actions">
+        <button type="button" class="pill" data-act="cancelEdit">${t("cancel")}</button>
+        <button type="submit" class="pill primary" id="saveBtn">${t("save")}</button>
+      </div>
+    </form>`;
+}
+
+function renderMine() {
+  setTint(ui.editing ? ui.editing.theme : "selfLove");
+  const list = state.custom.map(c => `
+    <div class="mine-item th-${c.theme}">
+      <div class="txt">${esc(c.text)}</div>
+      <div class="mine-meta">
+        <span class="theme-tag">${svg(c.theme)}${THEME_TITLES[c.theme][L()]}</span>
+        ${ui.confirmDel === c.id
+          ? `<span class="confirm">${t("sure")} <button class="mini danger" data-act="doDelete" data-id="${c.id}">${t("yes")}</button><button class="mini" data-act="noDelete">${t("cancel")}</button></span>`
+          : `<span><button class="mini" data-act="editMine" data-id="${c.id}">${t("edit")}</button><button class="mini danger" data-act="askDelete" data-id="${c.id}">${t("del")}</button></span>`}
+      </div>
+    </div>`).join("");
+  screen.innerHTML = `
+    <section class="view">
+      <h1>${t("mineTitle")}</h1>
+      <p class="lead">${t("mineLead")}</p>
+      ${ui.editing ? formHTML() : `<button class="pill primary" style="align-self:flex-start" data-act="newMine">${svg("plus")}${t("add")}</button>`}
+      ${state.custom.length ? list : (ui.editing ? "" : `<div class="empty">${svg("heartText")}<p class="big">${t("emptyBig")}</p><p class="lead">${t("emptySmall")}</p></div>`)}
+    </section>`;
+  if (ui.editing) {
+    const ta = document.getElementById("mineText");
+    ta.addEventListener("input", () => { ui.editing.text = ta.value; });
+  }
+}
+
+function exportCode() {
+  return JSON.stringify({ afirmacji: 1, lang: state.lang, themes: state.themes, includeCustom: state.includeCustom, custom: state.custom.map(c => ({ id: c.id, text: c.text, theme: c.theme })) });
+}
+
+function renderSettings() {
+  setTint("dreams");
+  const total = THEMES.reduce((n, th) => n + LIB[th].length, 0);
+  screen.innerHTML = `
+    <section class="view">
+      <h1>${t("settingsTitle")}</h1>
+      <div class="section">
+        <div class="seg" role="group" aria-label="${t("tabSettings")}">
+          <button data-act="lang" data-lang="uk" aria-pressed="${state.lang === "uk"}">Українська</button>
+          <button data-act="lang" data-lang="pl" aria-pressed="${state.lang === "pl"}">Polski</button>
+        </div>
+        <p class="lead">${t("langLead")}</p>
+      </div>
+      <div class="section">
+        <div class="eyebrow">${t("homeTitle")}</div>
+        <ol class="steps"><li>${t("home1")}</li><li>${t("home2")}</li><li>${t("home3")}</li><li>${t("home4")}</li></ol>
+      </div>
+      <div class="section">
+        <div class="eyebrow">${t("widgetTitle")}</div>
+        <div class="code-box">
+          <p>${t("widgetLead")}</p>
+          <textarea id="exportCode" readonly aria-label="${t("widgetTitle")}">${esc(exportCode())}</textarea>
+          <button class="pill primary" style="align-self:flex-start" data-act="copyCode">${t("copyCode")}</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="stat"><span>${t("stats")}</span><b>${total}</b></div>
+        <div class="stat"><span>${t("statsMine")}</span><b>${state.custom.length}</b></div>
+      </div>
+    </section>`;
+}
+
+function render(animate) {
+  renderTabs();
+  if (ui.tab === "today") renderToday(animate);
+  else if (ui.tab === "themes") renderThemes();
+  else if (ui.tab === "mine") renderMine();
+  else renderSettings();
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 1800);
+}
+async function copyText(text, fallbackEl) {
+  try { await navigator.clipboard.writeText(text); toast(t("copied")); }
+  catch (e) { if (fallbackEl) { fallbackEl.focus(); fallbackEl.select(); } }
+}
+
+/* ---------- Дії ---------- */
+function toggleTheme(th) {
+  const i = state.themes.indexOf(th);
+  if (i >= 0) state.themes.splice(i, 1); else state.themes.push(th);
+  persist();
+}
+
+document.addEventListener("click", async (e) => {
+  const tabBtn = e.target.closest("[data-tab]");
+  if (tabBtn) { ui.tab = tabBtn.dataset.tab; ui.detail = null; ui.confirmDel = null; render(); window.scrollTo(0, 0); return; }
+  const el = e.target.closest("[data-act]");
+  if (!el || el.tagName === "INPUT") return;
+  const act = el.dataset.act, th = el.dataset.themeId, id = el.dataset.id;
+  switch (act) {
+    case "another": {
+      const cur = ui.shown || todayAff();
+      const p = pool().filter(x => x.id !== cur.id);
+      ui.shown = p.length ? p[Math.floor(Math.random() * p.length)] : null;
+      render(true); break;
+    }
+    case "backToday": ui.shown = null; render(true); break;
+    case "share": {
+      const a = ui.shown || todayAff();
+      if (navigator.share) { try { await navigator.share({ text: a.text }); break; } catch (err) { if (err && err.name === "AbortError") break; } }
+      copyText(a.text); break;
+    }
+    case "openTheme": ui.detail = th; render(); window.scrollTo(0, 0); break;
+    case "closeDetail": ui.detail = null; render(); break;
+    case "toggleTheme": toggleTheme(th); render(); break;
+    case "newMine": ui.editing = { id: null, text: "", theme: "selfLove" }; ui.confirmDel = null; render(); document.getElementById("mineText").focus(); break;
+    case "editMine": { const c = state.custom.find(x => x.id === id); if (c) { ui.editing = { ...c }; ui.confirmDel = null; render(); window.scrollTo(0, 0); } break; }
+    case "pickTheme": ui.editing.theme = th; render(); break;
+    case "cancelEdit": ui.editing = null; render(); break;
+    case "askDelete": ui.confirmDel = id; render(); break;
+    case "noDelete": ui.confirmDel = null; render(); break;
+    case "doDelete": state.custom = state.custom.filter(x => x.id !== id); ui.confirmDel = null; persist(); render(); break;
+    case "lang": state.lang = el.dataset.lang; ui.shown = null; persist(); render(); break;
+    case "copyCode": copyText(exportCode(), document.getElementById("exportCode")); break;
+  }
+});
+
+document.addEventListener("change", (e) => {
+  const el = e.target;
+  if (el.dataset.act === "toggleTheme") { toggleTheme(el.dataset.themeId); render(); }
+  if (el.dataset.act === "includeCustom") { state.includeCustom = el.checked; persist(); render(); }
+});
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "mineForm") return;
+  e.preventDefault();
+  const ed = ui.editing, text = (ed.text || "").trim();
+  if (!text) { document.getElementById("mineText").focus(); return; }
+  if (ed.id) {
+    const c = state.custom.find(x => x.id === ed.id);
+    if (c) { c.text = text; c.theme = ed.theme; }
+  } else {
+    state.custom.unshift({ id: uid(), text, theme: ed.theme, created: Date.now() });
+  }
+  ui.editing = null; persist(); render();
+});
+
+/* Нова афірмація опівночі та при поверненні на сторінку */
+function refreshDay() {
+  const before = dayNumber(ui.now);
+  ui.now = new Date();
+  if (dayNumber(ui.now) !== before) { ui.shown = null; }
+  if (ui.tab === "today") render();
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshDay(); });
+function scheduleMidnight() {
+  const n = new Date(), next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 5);
+  setTimeout(() => { refreshDay(); scheduleMidnight(); }, next - n);
+}
+scheduleMidnight();
+
+render(true);
+})();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
+</script>
+</body>
+</html>
