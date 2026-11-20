@@ -113,7 +113,7 @@ function buildWidget(s, family) {
 
   const top = w.addStack();
   top.centerAlignContent();
-  const sym = SF.named(SYMBOL[a.theme]);
+  const sym = SFSymbol.named(SYMBOL[a.theme]);
   if (sym) {
     const img = top.addImage(sym.image);
     img.imageSize = new Size(12, 12);
