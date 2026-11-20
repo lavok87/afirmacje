@@ -1,5 +1,5 @@
 // Офлайн-режим: сторінка й іконки зберігаються на телефоні, шрифти кешуються після першого відкриття.
-const CACHE = "afirmacji-v1";
+const CACHE = "afirmacji-v2";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -29,6 +29,8 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
+  // Скрипт віджета завжди беремо свіжий з мережі
+  if (url.pathname.endsWith(".js") && !url.pathname.endsWith("sw.js") && url.origin === location.origin) return;
   if (url.origin === location.origin || isFont) {
     e.respondWith(
       caches.match(req).then((hit) => hit || fetch(req).then((res) => {
