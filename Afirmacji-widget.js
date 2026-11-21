@@ -19,6 +19,32 @@ const TITLES = {
 };
 // [світлий 1, світлий 2, акцент, темний 1, темний 2, акцент у темному]
 const COLORS = {"confidence": ["#FDE8D2", "#F5BFA8", "#B8664A", "#423839", "#5f4946", "#d19c89"], "productivity": ["#FBF1DC", "#EDCBA4", "#946B40", "#42393a", "#5c4c45", "#b99f83"], "mindfulness": ["#E8F2E6", "#BFD9C5", "#55866A", "#3f393c", "#4f504e", "#90b09e"], "selfLove": ["#FCE1E4", "#F2AFBC", "#B85A70", "#42373b", "#5e444c", "#d194a2"], "motivation": ["#FDE4D6", "#F2A994", "#B5563D", "#423739", "#5e4340", "#cf9181"], "dreams": ["#EDE6F7", "#C9BAE8", "#7660AE", "#40373e", "#524858", "#a698ca"], "gratitude": ["#FFF3DB", "#F3D09F", "#9C7430", "#43393a", "#5e4e44", "#bfa578"]};
+// Фони: [колір 1, колір 2, колір тексту]. "theme" — кольори теми афірмації, "photo" — своє фото.
+const BACKGROUNDS = {
+  theme:    { name: ["Кольори теми (змінюються)", "Kolory tematu (zmienne)"] },
+  powder:   { name: ["Пудровий рожевий", "Pudrowy róż"], c: ["#FCE1E4", "#F2AFBC", "#57373d"] },
+  peach:    { name: ["Персик", "Brzoskwinia"], c: ["#FDE8D2", "#F5BFA8", "#5a3426"] },
+  lavender: { name: ["Лаванда", "Lawenda"], c: ["#EDE6F7", "#C9BAE8", "#3f3159"] },
+  sage:     { name: ["Шавлія", "Szałwia"], c: ["#E8F2E6", "#BFD9C5", "#2f4a3a"] },
+  sand:     { name: ["Пісок", "Piasek"], c: ["#FBF1DC", "#EDCBA4", "#4f3a22"] },
+  sunset:   { name: ["Захід сонця", "Zachód słońca"], c: ["#F9C5B5", "#C99BD8", "#3d2433"] },
+  night:    { name: ["Нічне небо", "Nocne niebo"], c: ["#2b2140", "#4a3466", "#f5e4f0"] },
+  white:    { name: ["Білий", "Biały"], c: ["#FFFFFF", "#F6EFEF", "#3b2a2e"] },
+  photo:    { name: ["Своє фото…", "Własne zdjęcie…"] }
+};
+// Шрифти, що підтримують українські та польські літери
+const FONTS = {
+  georgia:   { name: ["Класичний (Georgia)", "Klasyczna (Georgia)"], f: (n) => new Font("Georgia", n) },
+  georgiaI:  { name: ["Класичний курсив", "Klasyczna kursywa"], f: (n) => new Font("Georgia-Italic", n) },
+  times:     { name: ["Книжковий (Times)", "Książkowa (Times)"], f: (n) => new Font("TimesNewRomanPSMT", n) },
+  avenir:    { name: ["Сучасний (Avenir)", "Nowoczesna (Avenir)"], f: (n) => new Font("AvenirNext-Medium", n) },
+  light:     { name: ["Легкий тонкий", "Lekka cienka"], f: (n) => new Font("HelveticaNeue-Light", n) },
+  rounded:   { name: ["Округлий", "Zaokrąglona"], f: (n) => Font.mediumRoundedSystemFont(n) },
+  typewriter:{ name: ["Друкарська машинка", "Maszyna do pisania"], f: (n) => new Font("AmericanTypewriter", n) }
+};
+const SIZES = { s: [0.85, ["Менший", "Mniejszy"]], m: [1, ["Звичайний", "Normalny"]], l: [1.18, ["Більший", "Większy"]] };
+const PHOTO = "afirmacji-tlo.jpg";
+
 const SYMBOL = { confidence: "sun.max.fill", productivity: "checklist", mindfulness: "leaf.fill", selfLove: "heart.fill", motivation: "flame.fill", dreams: "moon.stars.fill", gratitude: "sparkles" };
 
 // ---------- Налаштування (зберігаються в iCloud або на телефоні) ----------
@@ -26,7 +52,7 @@ const fm = (() => { try { return FileManager.iCloud(); } catch (e) { return File
 const FILE = fm.joinPath(fm.documentsDirectory(), "afirmacji.json");
 
 function loadState() {
-  const base = { lang: Device.language().startsWith("pl") ? "pl" : "uk", themes: THEMES.slice(), includeCustom: true, custom: [] };
+  const base = { lang: Device.language().startsWith("pl") ? "pl" : "uk", themes: THEMES.slice(), includeCustom: true, custom: [], bg: "theme", font: "georgia", size: "m" };
   try {
     if (fm.fileExists(FILE)) {
       if (fm.isFileStoredIniCloud(FILE) && !fm.isFileDownloaded(FILE)) { /* буде завантажено нижче */ }
@@ -75,13 +101,20 @@ const dyn = (l, d) => Color.dynamic(new Color(l), new Color(d));
 const INK = dyn("#57373d", "#f5e4e2");
 const INK_SOFT = dyn("#8d6c71", "#c4a7aa");
 
-function serif(size) { return new Font("Georgia", size); }
+let CURRENT = null;
+function serif(size) {
+  const s = CURRENT || {};
+  const f = FONTS[s.font] || FONTS.georgia;
+  return f.f(Math.round(size * ((SIZES[s.size] || SIZES.m)[0])));
+}
+function photoPath() { return fm.joinPath(fm.documentsDirectory(), PHOTO); }
 
 function buildWidget(s, family) {
   const now = new Date();
   const a = affirmationFor(s, now);
   const L = s.lang === "pl" ? 1 : 0;
   const c = COLORS[a.theme];
+  CURRENT = s;
   const w = new ListWidget();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 30);
   w.refreshAfterDate = tomorrow;
@@ -101,12 +134,24 @@ function buildWidget(s, family) {
   }
 
   const g = new LinearGradient();
-  g.colors = [dyn(c[0], c[3]), dyn(c[1], c[4])];
   g.locations = [0, 1];
   g.startPoint = new Point(0, 0);
   g.endPoint = new Point(1, 1);
-  w.backgroundGradient = g;
-  const accent = dyn(c[2], c[5]);
+  let ink = INK, inkSoft = INK_SOFT, accent = dyn(c[2], c[5]);
+  const bg = BACKGROUNDS[s.bg] || BACKGROUNDS.theme;
+  let photo = null;
+  if (s.bg === "photo" && fm.fileExists(photoPath())) { try { photo = fm.readImage(photoPath()); } catch (e) {} }
+  if (photo) {
+    w.backgroundImage = photo;
+    ink = Color.white(); inkSoft = new Color("#ffffff", 0.8); accent = new Color("#ffffff", 0.9);
+  } else if (bg.c) {
+    g.colors = [new Color(bg.c[0]), new Color(bg.c[1])];
+    w.backgroundGradient = g;
+    ink = new Color(bg.c[2]); inkSoft = new Color(bg.c[2], 0.7); accent = new Color(bg.c[2], 0.8);
+  } else {
+    g.colors = [dyn(c[0], c[3]), dyn(c[1], c[4])];
+    w.backgroundGradient = g;
+  }
   const small = family === "small";
   const large = family === "large" || family === "extraLarge";
   w.setPadding(small ? 14 : 18, 16, small ? 14 : 16, 16);
@@ -130,7 +175,7 @@ function buildWidget(s, family) {
   w.addSpacer();
   const text = w.addText(a.text);
   text.font = serif(small ? 17 : large ? 28 : 21);
-  text.textColor = INK;
+  text.textColor = ink;
   text.minimumScaleFactor = 0.5;
   if (!small) text.centerAlignText();
   w.addSpacer();
@@ -143,7 +188,7 @@ function buildWidget(s, family) {
     df.dateFormat = "EEEE, d MMMM";
     const d = foot.addText("♥  " + df.string(now));
     d.font = Font.mediumSystemFont(10);
-    d.textColor = INK_SOFT;
+    d.textColor = inkSoft;
     foot.addSpacer();
   }
   return w;
@@ -151,57 +196,136 @@ function buildWidget(s, family) {
 
 // ---------- Меню при запуску в додатку Scriptable ----------
 async function menu(s) {
-  const L = s.lang === "pl" ? 1 : 0;
-  const tr = (uk, pl) => (L ? pl : uk);
-  const a = new Alert();
-  a.title = tr("Афірмації", "Afirmacje");
-  a.message = affirmationFor(s, new Date()).text;
-  a.addAction(tr("Показати віджет", "Pokaż widżet"));
-  a.addAction(tr("Імпортувати зі сторінки (з буфера)", "Importuj ze strony (ze schowka)"));
-  a.addAction(tr("Додати свою афірмацію", "Dodaj własną afirmację"));
-  a.addAction(tr("Мова: українська / польська", "Język: ukraiński / polski"));
-  a.addCancelAction(tr("Закрити", "Zamknij"));
-  const i = await a.presentSheet();
+  while (true) {
+    const L = s.lang === "pl" ? 1 : 0;
+    const tr = (uk, pl) => (L ? pl : uk);
+    const a = new Alert();
+    a.title = tr("Афірмації", "Afirmacje");
+    a.message = affirmationFor(s, new Date()).text;
+    const items = [
+      ["preview", tr("Показати віджет", "Pokaż widżet")],
+      ["add", tr("Додати свою афірмацію", "Dodaj własną afirmację")],
+      ["mine", tr("Мої афірмації", "Moje afirmacje") + ` (${s.custom.length})`],
+      ["bg", tr("Фон", "Tło")],
+      ["font", tr("Шрифт і розмір", "Czcionka i rozmiar")],
+      ["themes", tr("Теми", "Tematy")],
+      ["lang", tr("Мова: українська → польська", "Język: polski → ukraiński")],
+      ["import", tr("Імпортувати зі сторінки (з буфера)", "Importuj ze strony (ze schowka)")]
+    ];
+    items.forEach(it => a.addAction(it[1]));
+    a.addCancelAction(tr("Готово", "Gotowe"));
+    const i = await a.presentSheet();
+    if (i < 0 || i >= items.length) break;
+    const act = items[i][0];
 
-  if (i === 0) {
-    await buildWidget(s, "medium").presentMedium();
-  } else if (i === 1) {
-    const raw = Pasteboard.paste() || "";
-    try {
-      const data = JSON.parse(raw);
-      if (!data || data.afirmacji !== 1) throw new Error();
-      s.lang = data.lang === "pl" ? "pl" : "uk";
-      s.themes = (data.themes || []).filter(t => THEMES.includes(t));
-      s.includeCustom = data.includeCustom !== false;
-      s.custom = (data.custom || []).filter(c => c && c.text && THEMES.includes(c.theme));
-      saveState(s);
-      await info(tr("Готово! Імпортовано своїх афірмацій: ", "Gotowe! Zaimportowano własnych afirmacji: ") + s.custom.length);
-    } catch (e) {
-      await info(tr("У буфері немає коду. На сторінці відкрий «Мова» → «Копіювати код» і спробуй ще раз.",
-                    "W schowku nie ma kodu. Na stronie otwórz „Język” → „Kopiuj kod” i spróbuj ponownie."));
-    }
-  } else if (i === 2) {
-    const q = new Alert();
-    q.title = tr("Нова афірмація", "Nowa afirmacja");
-    q.addTextField(tr("Я спокійна і щаслива", "Jestem spokojna i szczęśliwa"), "");
-    q.addAction(tr("Далі", "Dalej"));
-    q.addCancelAction(tr("Скасувати", "Anuluj"));
-    if ((await q.present()) === 0) {
-      const text = q.textFieldValue(0).trim();
+    if (act === "preview") {
+      await buildWidget(s, "medium").presentMedium();
+    } else if (act === "add") {
+      const text = await askText(tr("Нова афірмація", "Nowa afirmacja"), "", tr("Я спокійна і щаслива", "Jestem spokojna i szczęśliwa"), tr);
       if (text) {
-        const th = new Alert();
-        th.title = tr("Тема", "Temat");
-        THEMES.forEach(t => th.addAction(TITLES[t][L]));
-        const k = await th.presentSheet();
+        const k = await pick(tr("Тема", "Temat"), THEMES.map(t => TITLES[t][L]), tr);
         s.custom.unshift({ id: UUID.string(), text, theme: THEMES[k] || "selfLove" });
         saveState(s);
         await info(tr("Збережено 💛", "Zapisano 💛"));
       }
+    } else if (act === "mine") {
+      if (!s.custom.length) { await info(tr("Своїх афірмацій поки немає.", "Nie ma jeszcze własnych afirmacji.")); continue; }
+      const k = await pick(tr("Мої афірмації", "Moje afirmacje"), s.custom.map(c => c.text), tr);
+      if (k < 0) continue;
+      const item = s.custom[k];
+      const d = await pick(item.text, [tr("Змінити текст", "Zmień tekst"), tr("Видалити", "Usuń")], tr);
+      if (d === 0) {
+        const text = await askText(tr("Редагування", "Edycja"), item.text, "", tr);
+        if (text) { item.text = text; saveState(s); }
+      } else if (d === 1) {
+        s.custom.splice(k, 1); saveState(s);
+      }
+    } else if (act === "bg") {
+      const keys = Object.keys(BACKGROUNDS);
+      const k = await pick(tr("Фон віджета", "Tło widżetu"), keys.map(x => (s.bg === x ? "✓ " : "") + BACKGROUNDS[x].name[L]), tr);
+      if (k < 0) continue;
+      if (keys[k] === "photo") {
+        try {
+          const img = await Photos.fromLibrary();
+          fm.writeImage(photoPath(), dimmed(img));
+          s.bg = "photo";
+        } catch (e) { continue; }
+      } else {
+        s.bg = keys[k];
+      }
+      saveState(s);
+      await buildWidget(s, "medium").presentMedium();
+    } else if (act === "font") {
+      const keys = Object.keys(FONTS);
+      const k = await pick(tr("Шрифт", "Czcionka"), keys.map(x => (s.font === x ? "✓ " : "") + FONTS[x].name[L]), tr);
+      if (k < 0) continue;
+      s.font = keys[k];
+      const sk = Object.keys(SIZES);
+      const z = await pick(tr("Розмір тексту", "Rozmiar tekstu"), sk.map(x => (s.size === x ? "✓ " : "") + SIZES[x][1][L]), tr);
+      if (z >= 0) s.size = sk[z];
+      saveState(s);
+      await buildWidget(s, "medium").presentMedium();
+    } else if (act === "themes") {
+      const k = await pick(tr("Увімкнути / вимкнути тему", "Włącz / wyłącz temat"),
+        THEMES.map(t => (s.themes.includes(t) ? "✓ " : "○ ") + TITLES[t][L]), tr);
+      if (k < 0) continue;
+      const t = THEMES[k];
+      s.themes = s.themes.includes(t) ? s.themes.filter(x => x !== t) : s.themes.concat([t]);
+      saveState(s);
+    } else if (act === "lang") {
+      s.lang = s.lang === "pl" ? "uk" : "pl";
+      saveState(s);
+    } else if (act === "import") {
+      const raw = Pasteboard.paste() || "";
+      try {
+        const data = JSON.parse(raw);
+        if (!data || data.afirmacji !== 1) throw new Error();
+        s.lang = data.lang === "pl" ? "pl" : "uk";
+        s.themes = (data.themes || []).filter(t => THEMES.includes(t));
+        s.includeCustom = data.includeCustom !== false;
+        s.custom = (data.custom || []).filter(c => c && c.text && THEMES.includes(c.theme));
+        saveState(s);
+        await info(tr("Готово! Імпортовано своїх афірмацій: ", "Gotowe! Zaimportowano własnych afirmacji: ") + s.custom.length);
+      } catch (e) {
+        await info(tr("У буфері немає коду. На сторінці відкрий «Мова» → «Копіювати код» і спробуй ще раз.",
+                      "W schowku nie ma kodu. Na stronie otwórz „Język” → „Kopiuj kod” i spróbuj ponownie."));
+      }
     }
-  } else if (i === 3) {
-    s.lang = s.lang === "pl" ? "uk" : "pl";
-    saveState(s);
   }
+}
+
+async function pick(title, options, tr) {
+  const a = new Alert();
+  a.title = title;
+  options.forEach(o => a.addAction(o));
+  a.addCancelAction(tr("Назад", "Wstecz"));
+  const k = await a.presentSheet();
+  return k >= 0 && k < options.length ? k : -1;
+}
+
+async function askText(title, value, placeholder, tr) {
+  const q = new Alert();
+  q.title = title;
+  q.addTextField(placeholder, value);
+  q.addAction(tr("Зберегти", "Zapisz"));
+  q.addCancelAction(tr("Скасувати", "Anuluj"));
+  if ((await q.present()) !== 0) return "";
+  return q.textFieldValue(0).trim();
+}
+
+// Затемнює фото, щоб білий текст добре читався, і зменшує його для віджета
+function dimmed(img) {
+  const maxW = 1200;
+  const k = Math.min(1, maxW / img.size.width);
+  const size = new Size(Math.round(img.size.width * k), Math.round(img.size.height * k));
+  const ctx = new DrawContext();
+  ctx.size = size;
+  ctx.opaque = true;
+  ctx.respectScreenScale = false;
+  ctx.drawImageInRect(img, new Rect(0, 0, size.width, size.height));
+  ctx.setFillColor(new Color("#000000", 0.35));
+  ctx.fillRect(new Rect(0, 0, size.width, size.height));
+  return ctx.getImage();
 }
 async function info(text) { const a = new Alert(); a.message = text; a.addAction("OK"); await a.present(); }
 
@@ -210,6 +334,9 @@ if (fm.fileExists(FILE) && typeof fm.downloadFileFromiCloud === "function") {
   try { await fm.downloadFileFromiCloud(FILE); } catch (e) {}
 }
 const state = loadState();
+if (state.bg === "photo" && fm.fileExists(photoPath()) && typeof fm.downloadFileFromiCloud === "function") {
+  try { await fm.downloadFileFromiCloud(photoPath()); } catch (e) {}
+}
 // Параметр віджета "uk" або "pl" примусово задає мову
 const param = (args.widgetParameter || "").trim().toLowerCase();
 if (param === "uk" || param === "pl") state.lang = param;
